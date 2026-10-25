@@ -1,0 +1,46 @@
+/* Fix Django Unfold Admin list_editable table layout */
+#changelist-form {
+    width: 100% !important;
+}
+
+#changelist-form table {
+    display: table !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
+}
+
+#changelist-form table thead {
+    display: table-header-group !important;
+}
+
+#changelist-form table tbody {
+    display: table-row-group !important;
+}
+
+#changelist-form table tr {
+    display: table-row !important;
+}
+
+#changelist-form table th {
+    display: table-cell !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+}
+
+#changelist-form table td {
+    display: table-cell !important;
+    vertical-align: middle !important;
+}
+
+#changelist-form table td > div,
+#changelist-form table td > label {
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+#changelist-form table td input[type="number"],
+#changelist-form table td input[type="text"] {
+    display: inline-block !important;
+    width: 80px !important;
+    padding: 4px 8px !important;
+}
