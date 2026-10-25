@@ -1,0 +1,89 @@
+{
+  "info": {
+    "name": "Signature Flow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Send Signature (Owner)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "save-tokens",
+            "type": "text/javascript",
+            "exec": [
+              "try {",
+              "  const res = pm.response.json();",
+              "  const created = res.data && res.data.created_requests ? res.data.created_requests : null;",
+              "  if (created && created.length) {",
+              "    if (created[0] && created[0].token) {",
+              "      pm.environment.set('signature_token_client', created[0].token);",
+              "      pm.environment.set('signature_token', created[0].token);",
+              "    }",
+              "    if (created[1] && created[1].token) {",
+              "      pm.environment.set('signature_token_owner', created[1].token);",
+              "    }",
+              "  } else {",
+              "    const token = res.data && res.data.token ? res.data.token : null;",
+              "    if (token) pm.environment.set('signature_token', token);",
+              "  }",
+              "} catch (e) { console.log('save tokens error', e); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer <JWT>", "type": "text" },
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "url": { "raw": "{{baseUrl}}/api/documents/:document_id/send-signature/", "host": ["{{baseUrl}}"], "path": ["api","documents",":document_id","send-signature",""] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"recipient_email\": \"client@example.com\",\n  \"recipient_name\": \"Client Company\",\n  \"message\": \"Please sign this agreement.\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Public: Get Signature Request",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/api/signatures/:token/", "host": ["{{baseUrl}}"], "path": ["api","signatures",":token",""] }
+      }
+    },
+    {
+      "name": "Public: Preview",
+      "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/signatures/:token/preview/" } }
+    },
+    {
+      "name": "Public: Sign",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "after-client-sign",
+            "type": "text/javascript",
+            "exec": [
+              "try {",
+              "  const res = pm.response.json();",
+              "  if (pm.response.code === 200) {",
+              "    const owner = pm.environment.get('signature_token_owner');",
+              "    if (owner) pm.environment.set('signature_token', owner);",
+              "  }",
+              "} catch (e) { console.log('post sign script error', e); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/api/signatures/:token/sign/" },
+        "body": { "mode": "raw", "raw": "{\n  \"signature_value\": \"John Doe\",\n  \"signature_type\": \"typed\"\n}" }
+      }
+    }
+  ]
+}

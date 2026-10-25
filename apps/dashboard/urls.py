@@ -1,0 +1,92 @@
+from django.urls import path
+
+from .views import (
+    BillingOverviewAPIView,
+    InvoiceDownloadAPIView,
+    CategorySearchAPIView,
+    CompanyBrandingAPIView,
+    CreditsOverviewAPIView,
+    DashboardOverviewAPIView,
+    DeleteAccountAPIView,
+    DocumentCopyAPIView,
+    DocumentDownloadAPIView,
+    DocumentEditAPIView,
+    DocumentHistoryAPIView,
+    DocumentHistoryByCategoryAPIView,
+    DocumentHistoryDeleteAPIView,
+    DocumentFeedbackCreateAPIView,
+    DocumentRequestAPIView,
+    DocumentTypeListAPIView,
+    GenerateDocumentAPIView,
+    HelpCenterOverviewAPIView,
+    LandingOverviewAPIView,
+    PaymentMethodAPIView,
+    SettingsOverviewAPIView,
+    TemplateCategoryListAPIView,
+    TemplateFormSchemaAPIView,
+    TemplateListAPIView,
+    DocumentPreviewAPIView,
+    PublicDocumentAccessAPIView,
+    DocumentStructureListCreateAPIView,
+    DocumentStructureDetailAPIView,
+    DocumentSchemaListAPIView,
+    DocumentSchemaDetailAPIView,
+    SendDocumentEmailAPIView,
+    SendDocumentSignatureAPIView,
+    SignatureRequestPublicDetailAPIView,
+    SignatureRequestPublicPreviewAPIView,
+    SignatureRequestFormAPIView,
+    SignatureRequestSignAPIView,
+)
+
+urlpatterns = [
+    path("landing/overview/", LandingOverviewAPIView.as_view(), name="landing-overview"),
+    path("dashboard/overview/", DashboardOverviewAPIView.as_view(), name="dashboard-overview"),
+
+    path("templates/categories/",TemplateCategoryListAPIView.as_view(), name="template-categories"),
+    path("templates/categories/search/", CategorySearchAPIView.as_view(), name="template-categories-search"),
+    path("templates/document-types/", DocumentTypeListAPIView.as_view(), name="template-document-types"),
+    path("templates/list/", TemplateListAPIView.as_view(), name="template-list"),
+    path("templates/form-schema/", TemplateFormSchemaAPIView.as_view(), name="template-form-schema"),
+
+    path("documents/generate/", GenerateDocumentAPIView.as_view(), name="document-generate"),
+    path("documents/<int:document_id>/feedback/", DocumentFeedbackCreateAPIView.as_view(), name="document-feedback"),
+    path("documents/<int:document_id>/preview/", DocumentPreviewAPIView.as_view(), name="document-preview"),
+    path("documents/<int:document_id>/download/", DocumentDownloadAPIView.as_view(), name="document-download"),
+    path("documents/<int:document_id>/edit/", DocumentEditAPIView.as_view(), name="document-edit"),
+    path("documents/<int:document_id>/copy/", DocumentCopyAPIView.as_view(), name="document-copy"),
+    path("documents/<int:document_id>/send-email/", SendDocumentEmailAPIView.as_view(), name="document-send-email"),
+    path("documents/<int:document_id>/send-signature/", SendDocumentSignatureAPIView.as_view(), name="document-send-signature"),
+    path("documents/access/", PublicDocumentAccessAPIView.as_view(), name="document-access"),
+
+    path("documents/history/", DocumentHistoryAPIView.as_view(), name="document-history"),
+    path("documents/history/by-category/", DocumentHistoryByCategoryAPIView.as_view(), name="document-history-by-category"),
+    # Backwards-compatible aliases that include the 'dashboard' prefix used elsewhere
+    path("dashboard/documents/history/", DocumentHistoryAPIView.as_view(), name="document-history-dashboard"),
+    path("dashboard/documents/history/by-category/", DocumentHistoryByCategoryAPIView.as_view(), name="document-history-by-category-dashboard"),
+    path("documents/history/<int:document_id>/", DocumentHistoryDeleteAPIView.as_view(), name="document-history-delete"),
+
+    path("billing/overview/", BillingOverviewAPIView.as_view(), name="billing-overview"),
+    path("billing/invoice/<int:payment_history_id>/download/", InvoiceDownloadAPIView.as_view(), name="invoice-download"),
+    path("billing/payment-method/", PaymentMethodAPIView.as_view(), name="payment-method-create"),
+    path("billing/payment-method/<int:payment_method_id>/", PaymentMethodAPIView.as_view(), name="payment-method-update-delete"),
+
+    path("credits/overview/", CreditsOverviewAPIView.as_view(), name="credits-overview"),
+
+    path("settings/company-branding/", CompanyBrandingAPIView.as_view(), name="company-branding"),
+    path("settings/overview/", SettingsOverviewAPIView.as_view(), name="settings-overview"),
+    path("settings/delete-account/", DeleteAccountAPIView.as_view(), name="settings-delete-account"),
+
+    path("help-center/overview/", HelpCenterOverviewAPIView.as_view(), name="help-center-overview"),
+    path("help-center/request-document/", DocumentRequestAPIView.as_view(), name="help-center-request-document"),
+
+    path("admin/document-structures/", DocumentStructureListCreateAPIView.as_view(), name="admin-document-structures"),
+    path("admin/document-structures/<int:structure_id>/", DocumentStructureDetailAPIView.as_view(), name="admin-document-structures-detail"),
+    path("admin/document-schemas/", DocumentSchemaListAPIView.as_view(), name="admin-document-schemas"),
+    path("admin/document-schemas/<int:schema_id>/", DocumentSchemaDetailAPIView.as_view(), name="admin-document-schemas-detail"),
+
+    path("signatures/<str:token>/", SignatureRequestPublicDetailAPIView.as_view(), name="signature-request-public-detail"),
+    path("signatures/<str:token>/preview/", SignatureRequestPublicPreviewAPIView.as_view(), name="signature-request-public-preview"),
+    path("signatures/<str:token>/sign-form/", SignatureRequestFormAPIView.as_view(), name="signature-request-sign-form"),
+    path("signatures/<str:token>/sign/", SignatureRequestSignAPIView.as_view(), name="signature-request-sign"),
+]
